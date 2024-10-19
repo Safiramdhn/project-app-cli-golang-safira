@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"project-app-cli-golang-safira/converter"
@@ -10,7 +9,7 @@ import (
 	"runtime"
 )
 
-func ClearScreen() {
+func clearScreen() {
 	if runtime.GOOS == "windows" {
 		cmd := exec.Command("cmd", "/c", "cls")
 		cmd.Stdout = os.Stdout
@@ -22,7 +21,7 @@ func ClearScreen() {
 	}
 }
 
-func printMenu() {
+func printMainMenu() {
 	currentTemp := converter.GetSuhu()
 
 	fmt.Println("--------- Suhu Converter ---------")
@@ -33,74 +32,151 @@ func printMenu() {
 	fmt.Println("Choose Option: ")
 }
 
+func convertCurrentTemp() {
+	for {
+		clearScreen()
+		var celciusOption int
+		var back string
+
+		currentTemp := converter.GetSuhu()
+		celcius := suhu.Celcius{Value: currentTemp}
+
+		fmt.Println("--------- Celcius Converter ---------")
+		fmt.Println("1. Convert to Fahrenheit")
+		fmt.Println("2. Convert to Kelvin")
+		fmt.Println("3. Convert to Reamur")
+		fmt.Println("Choose Option: ")
+		fmt.Scan(&celciusOption)
+
+		loopValidation := converter.CelciusConverter(celciusOption, celcius)
+		if loopValidation {
+			fmt.Println("Back to converter menu? (y/n)")
+			fmt.Scan(&back)
+			if back != "y" {
+				break
+			}
+		} else {
+			continue
+		}
+	}
+}
+
+// }
+
+func customConvertMenu() int {
+	var input int
+	fmt.Println("--------- Custom Convert Menu ---------")
+	fmt.Println("--------- Celcius ---------")
+	fmt.Println("1. Convert from Celcius to Fahrenheit")
+	fmt.Println("2. Convert from Celcius to Kelvin")
+	fmt.Println("3. Convert from Celcius to Reamur")
+	fmt.Println("--------- Fahrenheit ---------")
+	fmt.Println("4. Convert from Fahrenheit to Celcius")
+	fmt.Println("5. Convert from Fahrenheit to Kelvin")
+	fmt.Println("6. Convert from Fahrenheit to Reamur")
+	fmt.Println("--------- Kelvin ---------")
+	fmt.Println("7. Convert from Kelvin to Celcius")
+	fmt.Println("8. Convert from Kelvin to Fahrenheit")
+	fmt.Println("9. Convert from Kelvin to Reamur")
+	fmt.Println("--------- Reamur ---------")
+	fmt.Println("10. Convert from Reamur to Celcius")
+	fmt.Println("11. Convert from Reamur to Fahrenheit")
+	fmt.Println("12. Convert from Reamur to Kelvin")
+	fmt.Println("Choose Option: ")
+
+	fmt.Scan(&input)
+	return input
+}
+
+func includes(slice []int, value int) bool {
+	for _, v := range slice {
+		if v == value {
+			return true
+		}
+	}
+	return false
+}
+
 func main() {
 	// use loop label for back to main menu
 mainMenu:
 	for {
 		var option int
 
-		ClearScreen()
-		printMenu()
+		clearScreen()
+		printMainMenu()
 		fmt.Scan(&option)
 
 		if option == 1 {
 			for {
-				ClearScreen()
-				var celciusOption int
-				var back, backToMain string
-				currentTemp := converter.GetSuhu()
-				celcius := suhu.Celcius{Value: currentTemp}
+				clearScreen()
+				var backToMain string
 
-				fmt.Println("--------- Celcius Converter ---------")
-				fmt.Println("1. Convert to Fahrenheit")
-				fmt.Println("2. Convert to Kelvin")
-				fmt.Println("3. Convert to Reamur")
-				fmt.Println("Choose Option: ")
-				fmt.Scan(&celciusOption)
+				convertCurrentTemp()
 
-				switch celciusOption {
-				case 1:
-					fahrenheit, err := converter.CelciusConverter(celcius, "fahrenheit")
-					if err != nil {
-						log.Fatalf("Conversion error: %v", err)
-					}
-					fmt.Printf("Current Temperature %.2f Celcius is equal to %.2f Fahrenheit\n", currentTemp, fahrenheit)
-
-				case 2:
-					kelvin, err := converter.CelciusConverter(celcius, "kelvin")
-					if err != nil {
-						log.Fatalf("Conversion error: %v", err)
-					}
-					fmt.Printf("Current Temperature %.2f Celcius is equal to %.2f Kelvin\n", currentTemp, kelvin)
-
-				case 3:
-					reamur, err := converter.CelciusConverter(celcius, "reamur")
-					if err != nil {
-						log.Fatalf("Conversion error: %v", err)
-					}
-					fmt.Printf("Current Temperature %.2f Celcius is equal to %.2f Reamur\n", currentTemp, reamur)
-
-				default:
-					fmt.Println("Invalid option, please try again.")
-					continue
+				fmt.Println("Back to main menu? (y/n)")
+				fmt.Scan(&backToMain)
+				if backToMain == "y" {
+					continue mainMenu
 				}
-
-				fmt.Println("Back to converter menu? (y/n)")
-				fmt.Scan(&back)
-				if back != "y" {
-					fmt.Println("Back to main menu? (y/n)")
-					fmt.Scan(&backToMain)
-					if backToMain == "y" {
-						break
-					}
-					ClearScreen()
-					fmt.Println("Thank You!")
-					break mainMenu
-				}
+				clearScreen()
+				fmt.Println("Thank You!")
+				break mainMenu
 
 			}
 		} else if option == 2 {
+			for {
+				clearScreen()
+				var back, backToMain string
+				var temperature float64
+				var loopValidation bool
+				option := customConvertMenu()
+				celciusOption := []int{1, 2, 3}
+				fahrenheitOption := []int{4, 5, 6}
+				kelvinOption := []int{7, 8, 9}
+				reamurOption := []int{10, 11, 12}
 
+				fmt.Println("Temperature : ")
+				fmt.Scan(&temperature)
+
+				if includes(celciusOption, option) {
+					celcius := suhu.Celcius{Value: temperature}
+					loopValidation = converter.CelciusConverter(option, celcius)
+				} else if includes(fahrenheitOption, option) {
+					fahrenheit := suhu.Fahrenheit{Value: temperature}
+					loopValidation = converter.FahrenheitConverter(option, fahrenheit)
+				} else if includes(kelvinOption, option) {
+					kelvin := suhu.Kelvin{Value: temperature}
+					loopValidation = converter.KelvinConverter(option, kelvin)
+				} else if includes(reamurOption, option) {
+					reamur := suhu.Reamur{Value: temperature}
+					loopValidation = converter.ReamurConverter(option, reamur)
+				}
+
+				if loopValidation {
+					fmt.Println("Back to converter menu? (y/n)")
+					fmt.Scan(&back)
+					if back != "y" {
+						fmt.Println("Back to main menu? (y/n)")
+						fmt.Scan(&backToMain)
+						if backToMain == "y" {
+							continue mainMenu
+						}
+						clearScreen()
+						fmt.Println("Thank You!")
+						break mainMenu
+					}
+				} else {
+					fmt.Println("Back to main menu? (y/n)")
+					fmt.Scan(&backToMain)
+					if backToMain == "y" {
+						continue mainMenu
+					}
+					clearScreen()
+					fmt.Println("Thank You!")
+					break mainMenu
+				}
+			}
 		}
 	}
 }
