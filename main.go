@@ -103,6 +103,9 @@ mainMenu:
 					break mainMenu
 				}
 			}
+		} else if option == 3 {
+			fmt.Println("Thank You")
+			break
 		}
 	}
 }
