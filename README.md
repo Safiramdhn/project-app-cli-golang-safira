@@ -1,6 +1,6 @@
 # Temperature Calculator - CLI Apps
 
-This is a command-line interface (CLI) application written in Golang for converting temperatures between different units. It includes conversion functions for Celcius, Fahrenheit, Kelvin, and Reamur. The app provides two main functionalities: converting the current temperature or performing a custom conversion based on user input.
+This is a command-line interface (CLI) application written in Golang for converting temperatures between different units. It includes conversion functions for Celcius, Fahrenheit, Kelvin, and Reamur. The app provides two main functionalities: converting the current temperature or performing a custom conversion based on user input. [Demo](https://drive.google.com/file/d/1cJWLd5KgNefEBJm3k3TgBSyLBQKZuHyT/view?usp=sharing)
 
 ## Feature
 
