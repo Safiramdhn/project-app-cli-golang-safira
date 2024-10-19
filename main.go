@@ -69,7 +69,7 @@ func convertCurrentTemp() {
 // }
 
 // print convert menu
-func customConvertMenu() int {
+func printCustomConvertMenu() int {
 	var input int
 	fmt.Println("--------- Custom Convert Menu ---------")
 	fmt.Println("--------- Celcius ---------")
@@ -141,7 +141,7 @@ mainMenu:
 				var temperature float64
 				var loopValidation bool
 				// choosing convert menu
-				option := customConvertMenu()
+				option := printCustomConvertMenu()
 				celciusOption := []int{1, 2, 3}
 				fahrenheitOption := []int{4, 5, 6}
 				kelvinOption := []int{7, 8, 9}
