@@ -52,7 +52,7 @@ mainMenu:
 				// save custom temperature from terminal
 				if option == 13 {
 					continue mainMenu
-				} else {
+				} else if option <= 12 {
 					fmt.Println("Temperature : ")
 					fmt.Scan(&temperature)
 
@@ -69,12 +69,13 @@ mainMenu:
 					} else if includes(reamurOption, option) {
 						reamur := suhu.Reamur{Value: temperature}
 						loopValidation = converter.ReamurConverter(option, reamur)
-					} else {
-						fmt.Println("Invalid option, please try again")
-						// add delay before continue to display error message
-						time.Sleep(2 * time.Second)
-						continue
 					}
+				} else {
+					fmt.Println("Invalid option, please try again")
+					// add delay before continue to display error message
+					time.Sleep(2 * time.Second)
+					continue
+
 				}
 
 				// add loop validation to set break or continue current infinite loop or main menu infinite loop
