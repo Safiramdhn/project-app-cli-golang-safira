@@ -9,6 +9,7 @@ import (
 	"runtime"
 )
 
+// clear terminal screen
 func clearScreen() {
 	if runtime.GOOS == "windows" {
 		cmd := exec.Command("cmd", "/c", "cls")
@@ -21,8 +22,9 @@ func clearScreen() {
 	}
 }
 
+// print main menu
 func printMainMenu() {
-	currentTemp := converter.GetSuhu()
+	currentTemp := converter.GetCurrentTemperature()
 
 	fmt.Println("--------- Suhu Converter ---------")
 	fmt.Printf("Current Temperature %.2f Celcius\n", currentTemp)
@@ -38,7 +40,8 @@ func convertCurrentTemp() {
 		var celciusOption int
 		var back string
 
-		currentTemp := converter.GetSuhu()
+		// get default or current temperature
+		currentTemp := converter.GetCurrentTemperature()
 		celcius := suhu.Celcius{Value: currentTemp}
 
 		fmt.Println("--------- Celcius Converter ---------")
@@ -46,8 +49,10 @@ func convertCurrentTemp() {
 		fmt.Println("2. Convert to Kelvin")
 		fmt.Println("3. Convert to Reamur")
 		fmt.Println("Choose Option: ")
+		// save input from terminal
 		fmt.Scan(&celciusOption)
 
+		// add loop validation to set break or continue the infinite loop
 		loopValidation := converter.CelciusConverter(celciusOption, celcius)
 		if loopValidation {
 			fmt.Println("Back to converter menu? (y/n)")
@@ -63,6 +68,7 @@ func convertCurrentTemp() {
 
 // }
 
+// print convert menu
 func customConvertMenu() int {
 	var input int
 	fmt.Println("--------- Custom Convert Menu ---------")
@@ -84,10 +90,12 @@ func customConvertMenu() int {
 	fmt.Println("12. Convert from Reamur to Kelvin")
 	fmt.Println("Choose Option: ")
 
+	// save input from terminal
 	fmt.Scan(&input)
 	return input
 }
 
+// function to check if variable value has included in slice
 func includes(slice []int, value int) bool {
 	for _, v := range slice {
 		if v == value {
@@ -107,6 +115,7 @@ mainMenu:
 		printMainMenu()
 		fmt.Scan(&option)
 
+		// convert current temperature
 		if option == 1 {
 			for {
 				clearScreen()
@@ -114,6 +123,7 @@ mainMenu:
 
 				convertCurrentTemp()
 
+				// condition to break or continue main menu infinite loop
 				fmt.Println("Back to main menu? (y/n)")
 				fmt.Scan(&backToMain)
 				if backToMain == "y" {
@@ -130,15 +140,18 @@ mainMenu:
 				var back, backToMain string
 				var temperature float64
 				var loopValidation bool
+				// choosing convert menu
 				option := customConvertMenu()
 				celciusOption := []int{1, 2, 3}
 				fahrenheitOption := []int{4, 5, 6}
 				kelvinOption := []int{7, 8, 9}
 				reamurOption := []int{10, 11, 12}
 
+				// save custom temperature from terminal
 				fmt.Println("Temperature : ")
 				fmt.Scan(&temperature)
 
+				// use includes function to navigate converter type
 				if includes(celciusOption, option) {
 					celcius := suhu.Celcius{Value: temperature}
 					loopValidation = converter.CelciusConverter(option, celcius)
@@ -153,6 +166,7 @@ mainMenu:
 					loopValidation = converter.ReamurConverter(option, reamur)
 				}
 
+				// add loop validation to set break or continue current infinite loop or main menu infinite loop
 				if loopValidation {
 					fmt.Println("Back to converter menu? (y/n)")
 					fmt.Scan(&back)

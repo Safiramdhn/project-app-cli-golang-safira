@@ -7,10 +7,12 @@ import (
 	"project-app-cli-golang-safira/suhu"
 )
 
-func GetSuhu() float64 {
+// default temperature
+func GetCurrentTemperature() float64 {
 	return 27.9
 }
 
+// convert calculation
 func celciusConverterCalculation(suhu suhu.Suhu, convert_to string) (float64, error) {
 	var result float64
 	switch convert_to {
@@ -71,6 +73,7 @@ func reamurConverterCalculation(suhu suhu.Suhu, convert_to string) (float64, err
 	return result, nil
 }
 
+// converter based on option from input convert menu
 func CelciusConverter(option int, celcius suhu.Celcius) bool {
 	switch option {
 	case 1:
